@@ -6,7 +6,11 @@
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-
+<script>
+if(localStorage.getItem("role") !== "user"){
+    window.location = "index.html";
+}
+</script>
 <h2>CSO Target Mapping</h2>
 
 <input id="cso_id" placeholder="CSO ID">
