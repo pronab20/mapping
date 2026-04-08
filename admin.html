@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="assets/style.css">
+</head>
 <body>
+
+<script>
+if(localStorage.getItem("role") !== "admin"){
+    alert("Unauthorized ❌");
+    window.location = "index.html";
+}
+</script>
 
 <h2>Super Admin Panel</h2>
 
-<h3>Add / Update Record</h3>
+<h3>Add / Update</h3>
 
 <input id="cso_id" placeholder="CSO ID">
 <input id="rev" placeholder="Revenue">
 <input id="ase" placeholder="ASE ID">
 
-<button onclick="saveAdmin()">Save</button>
+<button onclick="saveAdmin()">Save / Update</button>
 
 <hr>
 
@@ -25,7 +36,9 @@
 </tr>
 </table>
 
-<script type="module" src="assets/admin.js"></script>
+<button onclick="logout()">Logout</button>
+
+<script type="module" src="./assets/admin.js"></script>
 
 </body>
 </html>
