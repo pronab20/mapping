@@ -34,3 +34,12 @@ window.saveData = async function(){
 
     alert("Saved Successfully");
 };
+
+await addDoc(collection(db, "cso_data"), {
+    cso_id: document.getElementById("cso_id").value,
+    rev: document.getElementById("rev").value,
+    cooler: document.getElementById("cooler").value,
+    outlet: document.getElementById("outlet").value,
+    ase_id: localStorage.getItem("user"),
+    distributors
+});
