@@ -1,21 +1,30 @@
-
 <!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="assets/style.css">
-</head>
 <body>
-<div class="login-card">
-<h2>CSO Manager</h2>
-<input id="username" placeholder="ASE ID / admin">
+
+<h2>Login</h2>
+
+<input id="userid" placeholder="Employee ID / admin">
+<input id="password" type="password" placeholder="Password (only for admin)">
+
 <button onclick="login()">Login</button>
-</div>
+
 <script>
 function login(){
-    localStorage.setItem("user", document.getElementById("username").value);
-    window.location = "dashboard.html";
+
+    let user = document.getElementById("userid").value;
+    let pass = document.getElementById("password").value;
+
+    if(user === "admin" && pass === "26544479"){
+        localStorage.setItem("role", "admin");
+        window.location = "admin.html";
+    } else {
+        localStorage.setItem("role", "user");
+        localStorage.setItem("user", user);
+        window.location = "dashboard.html";
+    }
 }
 </script>
+
 </body>
 </html>
