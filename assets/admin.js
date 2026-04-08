@@ -1,14 +1,19 @@
 import { db } from "./firebase.js";
-import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } 
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+// 🔐 PROTECT ADMIN
 if(localStorage.getItem("role") !== "admin"){
+    alert("Access Denied ❌");
     window.location = "index.html";
 }
 
 let editId = null;
 
+// 🚀 AUTO LOAD
 loadData();
 
+// ✅ SAVE / UPDATE
 window.saveAdmin = async function(){
 
     let data = {
@@ -18,15 +23,19 @@ window.saveAdmin = async function(){
     };
 
     if(editId){
+        // 🔄 UPDATE
         await updateDoc(doc(db, "cso_data", editId), data);
         editId = null;
     } else {
+        // ➕ CREATE
         await addDoc(collection(db, "cso_data"), data);
     }
 
+    alert("Saved Successfully ✅");
     loadData();
 };
 
+// 📊 LOAD DATA
 async function loadData(){
 
     let table = document.getElementById("table");
@@ -59,6 +68,7 @@ async function loadData(){
     });
 }
 
+// ✏️ EDIT
 window.editRow = function(id,cso,rev,ase){
     document.getElementById("cso_id").value = cso;
     document.getElementById("rev").value = rev;
@@ -66,11 +76,15 @@ window.editRow = function(id,cso,rev,ase){
     editId = id;
 };
 
+// ❌ DELETE
 window.deleteRow = async function(id){
-    await deleteDoc(doc(db, "cso_data", id));
-    loadData();
+    if(confirm("Are you sure to delete?")){
+        await deleteDoc(doc(db, "cso_data", id));
+        loadData();
+    }
 };
 
+// 🚪 LOGOUT
 window.logout = function(){
     localStorage.clear();
     window.location = "index.html";
