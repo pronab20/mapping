@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="login-card">
+<h2>CSO Manager</h2>
+<input id="username" placeholder="ASE ID / admin">
+<button onclick="login()">Login</button>
+</div>
+<script>
+function login(){
+    localStorage.setItem("user", document.getElementById("username").value);
+    window.location = "dashboard.html";
+}
+</script>
+</body>
+</html>
