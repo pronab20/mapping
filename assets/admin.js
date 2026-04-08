@@ -1,29 +1,32 @@
 import { db } from "./firebase.js";
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// PROTECT ADMIN
 if(localStorage.getItem("role") !== "admin"){
-    alert("Access Denied");
     window.location = "index.html";
 }
 
-// AUTO LOAD
+let editId = null;
+
 loadData();
 
-// CREATE / UPDATE
 window.saveAdmin = async function(){
 
-    await addDoc(collection(db, "cso_data"), {
+    let data = {
         cso_id: document.getElementById("cso_id").value,
         rev: document.getElementById("rev").value,
         ase_id: document.getElementById("ase").value
-    });
+    };
 
-    alert("Saved");
+    if(editId){
+        await updateDoc(doc(db, "cso_data", editId), data);
+        editId = null;
+    } else {
+        await addDoc(collection(db, "cso_data"), data);
+    }
+
     loadData();
 };
 
-// READ
 async function loadData(){
 
     let table = document.getElementById("table");
@@ -49,45 +52,26 @@ async function loadData(){
             <td>${d.rev}</td>
             <td>${d.ase_id}</td>
             <td>
-                <button onclick="deleteRow('${docSnap.id}')">Delete</button>
                 <button onclick="editRow('${docSnap.id}','${d.cso_id}','${d.rev}','${d.ase_id}')">Edit</button>
+                <button onclick="deleteRow('${docSnap.id}')">Delete</button>
             </td>
         `;
     });
 }
 
-// DELETE
+window.editRow = function(id,cso,rev,ase){
+    document.getElementById("cso_id").value = cso;
+    document.getElementById("rev").value = rev;
+    document.getElementById("ase").value = ase;
+    editId = id;
+};
+
 window.deleteRow = async function(id){
     await deleteDoc(doc(db, "cso_data", id));
     loadData();
 };
 
-// EDIT
-window.editRow = function(id,cso,rev,ase){
-    document.getElementById("cso_id").value = cso;
-    document.getElementById("rev").value = rev;
-    document.getElementById("ase").value = ase;
-
-    window.editId = id;
-};
-
-// UPDATE
-window.saveAdmin = async function(){
-
-    if(window.editId){
-        await updateDoc(doc(db, "cso_data", window.editId), {
-            cso_id: document.getElementById("cso_id").value,
-            rev: document.getElementById("rev").value,
-            ase_id: document.getElementById("ase").value
-        });
-        window.editId = null;
-    } else {
-        await addDoc(collection(db, "cso_data"), {
-            cso_id: document.getElementById("cso_id").value,
-            rev: document.getElementById("rev").value,
-            ase_id: document.getElementById("ase").value
-        });
-    }
-
-    loadData();
+window.logout = function(){
+    localStorage.clear();
+    window.location = "index.html";
 };
