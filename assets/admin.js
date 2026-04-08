@@ -2,7 +2,7 @@ import { db } from "./firebase.js";
 import { collection, addDoc, getDocs, deleteDoc, doc, updateDoc } 
 from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// 🔐 PROTECT ADMIN
+// 🔐 ADMIN PROTECTION
 if(localStorage.getItem("role") !== "admin"){
     alert("Access Denied ❌");
     window.location = "index.html";
@@ -23,15 +23,13 @@ window.saveAdmin = async function(){
     };
 
     if(editId){
-        // 🔄 UPDATE
         await updateDoc(doc(db, "cso_data", editId), data);
         editId = null;
     } else {
-        // ➕ CREATE
         await addDoc(collection(db, "cso_data"), data);
     }
 
-    alert("Saved Successfully ✅");
+    alert("Saved ✅");
     loadData();
 };
 
@@ -78,7 +76,7 @@ window.editRow = function(id,cso,rev,ase){
 
 // ❌ DELETE
 window.deleteRow = async function(id){
-    if(confirm("Are you sure to delete?")){
+    if(confirm("Delete this record?")){
         await deleteDoc(doc(db, "cso_data", id));
         loadData();
     }
